@@ -27,8 +27,8 @@ const paddle = {
 
 // ブロックの設定
 const brickRowCount = 5;
-const brickColumnCount = 9;
-const brickWidth = 75;
+const brickColumnCount = 10;
+const brickWidth = 65;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 60;
@@ -273,4 +273,4 @@ function draw() {
 
 // 初期化処理
 initBricks();
-draw(); 
+draw();
