@@ -6,13 +6,14 @@ const ctx = canvas.getContext('2d');
 let score = 0;
 let lives = 3;
 let gameRunning = false;
+let baseSpeed = 5; // ボールの基本速度
 
 // ボールの設定
 const ball = {
     x: canvas.width / 2,
     y: canvas.height - 30,
-    dx: 5,
-    dy: -5,
+    dx: baseSpeed,
+    dy: -baseSpeed,
     radius: 10
 };
 
@@ -72,6 +73,28 @@ document.addEventListener('keyup', (e) => {
 // ボタンイベントリスナー
 document.getElementById('startButton').addEventListener('click', startGame);
 document.getElementById('resetButton').addEventListener('click', resetGame);
+
+// ボール速度スライダーのイベントリスナー
+const ballSpeedSlider = document.getElementById('ballSpeed');
+const speedValueText = document.getElementById('speedValue');
+
+ballSpeedSlider.addEventListener('input', (e) => {
+    const speedValue = parseInt(e.target.value);
+    speedValueText.textContent = speedValue;
+    updateBallSpeed(speedValue);
+});
+
+// ボールの速度を更新する関数
+function updateBallSpeed(speedValue) {
+    baseSpeed = speedValue;
+    
+    // 現在の方向を維持しながら速度を変更
+    const dirX = ball.dx > 0 ? 1 : -1;
+    const dirY = ball.dy > 0 ? 1 : -1;
+    
+    ball.dx = dirX * baseSpeed;
+    ball.dy = dirY * baseSpeed;
+}
 
 // ボールの描画
 function drawBall() {
@@ -173,8 +196,12 @@ function resetGame() {
     lives = 3;
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 30;
-    ball.dx = 5;
-    ball.dy = -5;
+    
+    // スライダーの現在の値を使用してボールの初期速度を設定
+    const speedValue = parseInt(ballSpeedSlider.value);
+    ball.dx = speedValue;
+    ball.dy = -speedValue;
+    
     paddle.x = (canvas.width - paddle.width) / 2;
     initBricks();
     drawScore();
@@ -207,7 +234,7 @@ function draw() {
         if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
             // パドルの位置に応じて反射角度を変える
             const hitPoint = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
-            ball.dx = hitPoint * 8; // 最大速度を調整
+            ball.dx = hitPoint * (baseSpeed * 1.5); // baseSpeedに基づいて調整
             ball.dy = -Math.abs(ball.dy); // 常に上向きに反射
         } else {
             // ゲームオーバー
@@ -219,8 +246,9 @@ function draw() {
             } else {
                 ball.x = canvas.width / 2;
                 ball.y = canvas.height - 30;
-                ball.dx = 5;
-                ball.dy = -5;
+                const speedValue = parseInt(ballSpeedSlider.value);
+                ball.dx = speedValue;
+                ball.dy = -speedValue;
                 paddle.x = (canvas.width - paddle.width) / 2;
             }
         }

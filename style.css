@@ -52,4 +52,26 @@ button:hover {
     font-size: 24px;
     margin-top: 20px;
     color: #333;
+}
+
+.speed-control {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.speed-control label {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.speed-control input[type="range"] {
+    width: 150px;
+    margin: 0 10px;
+}
+
+.speed-control span {
+    font-size: 16px;
+    min-width: 20px;
 } 
